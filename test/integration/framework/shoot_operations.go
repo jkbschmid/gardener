@@ -85,7 +85,9 @@ func (s *ShootGardenerTest) CreateShootResource(ctx context.Context, shootToCrea
 func (s *ShootGardenerTest) CreateShoot(ctx context.Context) (*v1beta1.Shoot, error) {
 	_, err := s.GetShoot(ctx)
 	if !apierrors.IsNotFound(err) {
-		return nil, err
+		s.Logger.Infof("TEMP: %s", err.Error())
+		s.Logger.Infof("TEMP: %v, %#v", err, err)
+		//return nil, err
 	}
 
 	shoot := s.Shoot
