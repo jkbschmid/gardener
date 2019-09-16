@@ -46,6 +46,7 @@ var (
 	machineImageVersion string
 	shootArtifactPath   string
 	machineType         string
+	extension           string
 	autoScalerMin       *int
 	autoScalerMax       *int
 
@@ -130,6 +131,7 @@ func init() {
 	if cloudprovider == gardenv1beta1.CloudProviderOpenStack && floatingPoolName == "" {
 		testLogger.Fatalf("EnvVar 'FLOATING_POOL_NAME' needs to be specified when creating a shoot on openstack")
 	}
+	extension = os.Getenv("EXTENSION")
 }
 
 func main() {
@@ -197,6 +199,9 @@ func modifyShootObject(shootObject *gardenv1beta1.Shoot) {
 
 	if seed != "" {
 		shootObject.Spec.Cloud.Seed = &seed
+	}
+	if extension != "" {
+		shootObject.Spec.Extensions = []gardenv1beta1.Extension{{Type: extension}}
 	}
 	helper.UpdateAnnotations(shootObject)
 	if err := helper.UpdateMachineImage(shootObject, cloudprovider, machineImage, machineImageVersion); err != nil {
